@@ -1,0 +1,125 @@
+div,p,h1,h2,h3,h4,h5,h6,input,table,tr,td{
+  padding: 0;
+  margin: 0;
+}
+
+
+input[type='checkbox']{
+  vertical-align:middle;
+}
+
+.page-shopping-cart{
+  width:1200px;
+  margin:50px auto;
+  font-size: 14px;
+  border: 1px solid #e3e3e3;
+  border-top: 2px solid #317ee7;
+}
+
+.page-shopping-cart .red-text {
+  color: #e94826; 
+}
+.page-shopping-cart .cart-title{
+  color: #317ee7;
+  font-size: 16px;
+  text-align: left;
+  padding-left: 20px;
+  line-height: 68px;
+}
+.page-shopping-cart .cart-product-title{
+  display: flex;
+  justify-content: space-between;
+}
+.page-shopping-cart .td-check {
+  width: 70px; 
+
+}
+.page-shopping-cart .td-product {
+  width: 460px; }
+.page-shopping-cart .td-num, .page-shopping-cart .td-price, .page-shopping-cart .td-total {
+  width: 160px; }
+.page-shopping-cart .td-do {
+  width: 150px; }
+
+/* cart-product */
+.cart-product table {
+  width: 1200px;
+  border: 1px solid #000;
+}
+.cart-product table td {
+
+  border: 1px solid #000;
+}
+.cart-product .checkbox-lable{
+  display: block;
+}
+.cart-product .td-product-info{
+  display: inline-flex;
+  justify-content: left;
+  align-items: center;
+}
+.cart-product .product-num{
+  display: inline-flex ;
+  justify-content: center;
+  border: 1px solid #e3e3e3;
+
+}
+.cart-product .num-do{
+  width: 24px;
+  height: 28px;
+  display: block;
+  background: #f7f7f7;
+  text-align: center;
+  line-height: 28px;
+  text-decoration: none;
+}
+.cart-product .num-input{
+  width: 42px;
+  height: 28px;
+  line-height: 28px;
+  border: none;
+  text-align: center;
+}
+.cart-product .product-delete{
+  text-decoration: none;
+}
+
+/* product-info */
+.cart-product-info{
+  display: flex;
+  justify-content: space-between;
+}
+
+.cart-product-info .left, .cart-product-info .right{
+  display: inline-flex;
+  justify-content: left;
+  align-items:center;
+  margin: 18px 8px;
+  height: 50px;
+}
+
+.delete-product, .keep-shopping{
+  text-decoration: none;
+  color: #000;
+  margin-right: 20px;
+}
+
+.check-num span{
+  color: red;
+}
+.product-total{
+  color: red;
+}
+
+.btn-buy{
+  height: 50px;
+  color: #fff;
+  font-size: 20px;
+  display: block;
+  width: 110px;
+  background: #ff7700;
+  text-align: center;
+  margin-left: 30px;
+  line-height: 50px;
+  text-decoration: none;
+}

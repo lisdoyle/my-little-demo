@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./main.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="main" v-cloak>
+
+    <div class="bar">
+      <input type="text" v-model="searchStr" placeholder="Enter your search terms" />
+    </div>
+
+    <ul>
+      <li v-for="a in (articles | searchFor(searchStr) )">
+        <a :href="a.url"><img :src="a.image" /></a>
+        <p>{{a.title}}</p>
+      </li>
+    </ul>
+  </div>
+</body>
+<script src="./app.js"></script>
+
+</html>

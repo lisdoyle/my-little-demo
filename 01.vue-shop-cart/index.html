@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  
+</head>
+
+<body>
+  <div class="page-shopping-cart" id="shopping-cart">
+    <h4 class="cart-title">购物清单</h4>
+
+    <!-- cart-product-title -->
+    <div class="cart-product-title">
+
+      <div class="td-check">
+        <input type="checkbox" id="check-all" :checked="isSelectAll" @click="selectProduct(isSelectAll)"/>
+        <label for="check-all">全选</label>
+      </div>
+
+      <div class="td-product">商品</div>
+      <div class="td-num">数量</div>
+      <div class="td-price">单价(元)</div>
+      <div class="td-total">金额(元)</div>
+      <div class="td-do">操作</div>
+    </div>
+
+    <!-- cart-prodcut -->
+    <div class="cart-product">
+      <table>
+        <!-- v-for 引入 item index -->
+        <tr v-for="(item,index) in productList">
+          <td class="td-check">
+            <label class="checkbox-lable" for="product-check">
+              <input type="checkbox" id="product-check" :checked = "item.select" @click="item.select=!item.select"/>
+            </label>
+          </td>
+
+          <td class="td-product">
+            <div class="td-product-info">
+              <img src="test.jpg" width="98" height="98">
+              <div class="product-info">
+                <h6>{{item.pro_name}}</h6>
+                <p>品牌：{{item.pro_brand}}&nbsp;&nbsp;产地：{{item.pro_place}}</p>
+                <p>规格/纯度:{{item.pro_purity}}&nbsp;&nbsp;起定量：{{item.pro_min}}</p>
+                <p>配送仓储：{{item.pro_depot}}</p>
+              </div>
+            </div>
+
+          </td>
+
+          <td class="td-num">
+            <div class="product-num">
+              <a href="javascript:;" class="num-reduce num-do" @click="item.pro_num--"><span>-</span></a>
+              <input type="text" class="num-input" v-model="item.pro_num">
+              <a href="javascript:;" class="num-add num-do" @click="item.pro_num++" ><span >+</span></a>
+            </div>
+          </td>
+
+          <td class="td-price">
+            <p class="red-text">￥<span class="price-text">{{item.pro_price.toFixed(2)}}</span></p>
+          </td>
+
+          <td class="td-total">
+            <p class="red-text">￥<span class="total-text">{{item.pro_price*item.pro_num}}</span></p>
+          </td>
+
+          <td class="td-do">
+            <a href="javascript:;" class="product-delete" @click="deleteOneProduct(index)">删除</a>
+          </td>
+        </tr>
+
+      </table>
+    </div>
+
+
+
+    <!-- product-info -->
+    <div class="cart-product-info">
+      <div class="left">
+        <a class="delete-product" href="javascript:;"><span></span>删除所选商品</a>
+        <a class="keep-shopping" href="#"><span></span>继续购物</a>
+      </div>
+
+      <div class="right">
+        <span class="check-num"><span>{{getTotal.totalNum}}</span>件商品总计（不含运费）：</span>
+        <span class="product-total">￥<span>{{getTotal.totalPrice}}</span></span>
+        <a class="btn-buy" href="javascript:;">去结算</a>
+      </div>
+
+    </div>
+    <div class="cart-worder">
+
+    </div>
+  </div>
+
+  <!-- <script>
+    var vm = new Vue({
+      el: "#shopping-cart",
+      data: {},
+      methods: {}
+    });
+  </script> -->
+
+  <script src="./app.js"></script>
+</body>
+
+</html>

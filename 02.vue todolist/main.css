@@ -1,0 +1,63 @@
+.list label h3 {
+  font-weight:bold;
+}
+
+.clear:after{
+  clear:both;
+  display:block;
+  content: "";
+}
+
+.items{
+  margin-top: 10px;
+}
+
+.items li{
+  list-style-type: none;
+  line-height: 40px;
+  padding: 0 20px;
+  border: 1px solid rgba(0, 153, 255, 0);
+}
+.items li:hover{
+  border: 1px solid #09f;
+}
+.items .text2{
+  height: 40px;
+  width: 100%;
+  
+  padding: 0 20px;
+  display: none;
+}
+.items .edit{
+  padding: 0;
+}
+.items .edit .text1{
+  display: none;
+}
+.items .edit .text2{
+  display: block;
+}
+.items .type-span{
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: #ccc;
+  margin: 14px 10px 0 0 ;
+}
+.items .span-done{
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: rgb(0, 168, 37);
+  margin: 14px 10px 0 0 ;
+}
+
+.items .close{
+  color: #f00;
+  line-height: 40px;
+  cursor: pointer;
+  display: none;
+}
+.items li:hover .close{
+  display: block;
+}

@@ -1,0 +1,117 @@
+.shake {
+  animation: shake-opacity 500ms 1 ease-in-out;
+}
+@keyframes shake-opacity {
+  0% {
+      transform: translate(0px, 0px) rotate(0deg);
+      opacity: 0.6;
+  }
+  10% {
+      transform: translate(-2px, -1px) rotate(-0.5deg);
+      opacity: 0.5;
+  }
+  20% {
+      transform: translate(-4px, 4px) rotate(1.5deg);
+      opacity: 0.4;
+  }
+  30% {
+      transform: translate(-4px, -1px) rotate(-1.5deg);
+      opacity: 0.8;
+  }
+  40% {
+      transform: translate(-2px, -1px) rotate(-2.5deg);
+      opacity: 0.3;
+  }
+  50% {
+      transform: translate(-4px, 1px) rotate(-2.5deg);
+      opacity: 0.5;
+  }
+  60% {
+      transform: translate(-2px, 4px) rotate(0.5deg);
+      opacity: 0.1;
+  }
+  70% {
+      transform: translate(-3px, 1px) rotate(-0.5deg);
+      opacity: 0.4;
+  }
+  80% {
+      transform: translate(0px, 0px) rotate(-0.5deg);
+      opacity: 0.5;
+  }
+  90% {
+      transform: translate(2px, -1px) rotate(-2.5deg);
+      opacity: 0.8;
+  }
+}
+
+
+.num-table {
+  display: inline-flex;
+  flex-direction:column;
+  position: relative;
+}
+.num-table .num-row{
+  display: inline-flex;
+}
+.num-table .num-col{
+  box-sizing: border-box;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  background: #58B7FF;
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+  border: 1px solid #ccc;
+}
+.num-table .no{
+  background: #ccc;
+  border: 1px solid #fff;
+}
+.num-table .cur{
+  background: #fff !important;
+}
+.num-table .cur-col{
+  background: #0068b7;
+}
+.num-table .cur-row{
+  background: #0068b7;
+}
+.num-table .err{
+  color: #ff4949;
+}
+
+.num-check{
+
+  position: absolute;
+  width: 180px;
+  box-shadow: 0 0 10px 0 #000;
+  left: 0;
+  top: 0;
+}
+.num-check ul{
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content:flex-start;
+  padding: 0;
+  margin: 0;
+}
+.num-check li {
+  box-sizing: border-box;
+  background: #fff;
+  color: #58B7FF;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  line-height: 60px;
+  font-size: 24px;
+  border: 1px solid #58B7FF;
+  cursor: pointer;
+  list-style: none;
+}
+.num-check li:hover {
+  color: #fff;
+  background: #58B7FF;
+  border: 1px solid #fff;
+}
