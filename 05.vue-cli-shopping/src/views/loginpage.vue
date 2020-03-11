@@ -2,17 +2,21 @@
   <div class="loginpage"> 
     <p>this is loginpage</p>
     
-    <login/>
+    <!-- <login/>
+    <register/> -->
+    <router-view/>
   </div>
 </template>
 
 <script>
-import login from '../components/login.vue'
+// import login from '../components/login.vue'
+// import register from '../components/register.vue'
 
 export default {
-  components:{
-    login,
-  }
+  // components:{
+  //   login,
+  //   register,
+  // }
 }
 </script>
 

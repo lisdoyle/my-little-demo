@@ -17,4 +17,21 @@ import './main.css'
 ```
 
 # 3.设置app.vue
-> 
+> 作为根组件，url=‘/’时，显示app.vue, 在里面设置<router-view>，用于显示子组件。
+
+# 4.创建loginpage.vue 
+> loginpage.vue 用于显示 子组件 login和register组件。 
+>通过children路由嵌套，在loginpage中<router-view>显示不同子组件
+```js
+{
+  path: '/loginpage',
+  name: 'loginpage',
+  component: loginpage,
+  children:[
+    //http://localhost:8080/?#/loginpage/login
+    {path:'login', component:login}, 
+    //http://localhost:8080/?#/loginpage/register
+    {path:'register', component:register},
+  ]
+},
+```

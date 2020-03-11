@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import app from '../App.vue'
 import loginpage from '../views/loginpage.vue'
+import login from '../components/login.vue'
+import register from '../components/register.vue'
 
 Vue.use(VueRouter)
 
@@ -24,12 +26,17 @@ const routes = [
   {
     path: '/loginpage',
     name: 'loginpage',
-    component: loginpage
+    component: loginpage,
+    children:[
+      {path:'login', component:login},
+      {path:'register', component:register},
+    ]
   },
   {
-    path: '*',
-    redirect: '/loginpage'
-  }
+    path: '/',
+    redirect: '/loginpage/register'
+  },
+  
 ]
 
 const router = new VueRouter({

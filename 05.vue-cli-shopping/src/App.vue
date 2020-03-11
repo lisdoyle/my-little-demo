@@ -13,12 +13,10 @@
 </template>
 
 <script>
-import loginpage from './views/loginpage.vue'
+
 
 export default {
-  components: {
-    loginpage,
-  }
+  
 }
 </script>
 

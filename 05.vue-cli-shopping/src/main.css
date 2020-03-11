@@ -4,3 +4,6 @@ body,div,p,ul,li,a {
   margin: 0;
   padding: 0;
 }
+html{
+  background: #f8f8f9;
+}
