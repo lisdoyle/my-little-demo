@@ -27,7 +27,7 @@
     </div>
 
     <!-- 商品展示 -->
-    <Product v-for="item in filteredAndOrderedList"></Product>
+    <Product  v-for="item in filteredAndOrderedList" :info="item" :key="item.id"></Product>
 
     <!-- Product中没商品时显示 -->
     <div class="product-not-found">暂无相关商品</div>

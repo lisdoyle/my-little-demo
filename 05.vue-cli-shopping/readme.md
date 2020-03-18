@@ -125,3 +125,26 @@ computed:{
 }
 ```
 > 把筛选后的 filteredAndOrderedList 通过 v-for 渲染在商品组件 <Product v-for="item in filteredAndOrderedList">product</Product> 上
+
+## 6.3把商品列表里每一项传给Product.vue
+>注册新的prop属性:info="item"就可以把每一项（item）商品传给Product.vue组件
+```html
+<Product  v-for="item in filteredAndOrderedList" :info="item" :key="item.id"></Product>
+```
+
+# 7.Product.vue组件
+## 7.1 注册prop属性
+>在Product.vue组件内部注册了info属性后，6.3 步骤的item就会传给info了，也就拿到当个商品的信息
+```js
+props:{
+  info: Object //初始化，注册info属性，使info可以接受List.vue中:info="item"传递的单个商品信息
+},
+```
+## 7.2根据info内容搭建商品展示页
+>根据info依次显示商品图片、名称、销量、颜色、单价，加入购物车
+
+## 7.3点击跳转详情页
+>实现效果为 url=  http://localhost:8080/#/product-info/[商品id号]
+```html
+<router-link :to="'/product-info/' + info.id"  class="product-main"> 
+```
