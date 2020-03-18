@@ -1,10 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import app from '../App.vue'
-import loginpage from '../views/loginpage.vue'
-import login from '../components/login.vue'
-import register from '../components/register.vue'
+import Loginpage from '../views/Loginpage.vue'
+import Login from '../components/Login.vue'
+import Register from '../components/Register.vue'
+import List from '../views/List.vue'
 
 Vue.use(VueRouter)
 
@@ -25,16 +24,21 @@ const routes = [
   
   {
     path: '/loginpage',
-    name: 'loginpage',
-    component: loginpage,
+    name: 'Loginpage',
+    component: Loginpage,
     children:[
-      {path:'login', component:login},
-      {path:'register', component:register},
+      {path:'login', component:Login},
+      {path:'register', component:Register},
     ]
   },
   {
     path: '/',
     redirect: '/loginpage/register'
+  },
+  {
+    path: '/list',
+    name: 'list',
+    component: List
   },
   
 ]
