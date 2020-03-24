@@ -40,7 +40,10 @@ const routes = [
     name: 'list',
     component: List
   },
-  
+  {
+    path: '/product-info/:id',
+    component: (resovle) => require(['../views/ProductInfo.vue'], resovle)
+  }
 ]
 
 const router = new VueRouter({

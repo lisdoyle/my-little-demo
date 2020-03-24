@@ -143,8 +143,73 @@ props:{
 ## 7.2根据info内容搭建商品展示页
 >根据info依次显示商品图片、名称、销量、颜色、单价，加入购物车
 
-## 7.3点击跳转详情页
+## 7.3点击跳转详情页ProductInfo.vue
 >实现效果为 url=  http://localhost:8080/#/product-info/[商品id号]
 ```html
 <router-link :to="'/product-info/' + info.id"  class="product-main"> 
+```
+
+# 8.创建商品详情页ProductInfo.vue
+## 8.1 获取路由中的id
+>因为在router.js中设置了'/product-info/:id',因此，点击商品后，url跳转为
+url = http://localhost:8080/#/product-info/[商品id号], 路由自动匹配[商品id号] 为:id，并可以通过 this.$route.params.id属性获取到[商品id号]
+
+所以在ProductInfo.vue中可以获取商品id号
+```js
+data(){
+  return {
+    // 获取路由'/product-info/:id'中的占位符：id的参数
+    id: parseInt(this.$route.params.id)
+  }
+}
+```
+## 8.2 通过id获取当前商品信息
+>从 'this.$store.state.productList'中获取所有商品列表，再通过find匹配出当前id号的商品信息。
+```js
+getProduct(){
+  // 异步获取数据：所有从外部获取数据的操作都用异步处理，防止获取时间过长而导致长时间等待
+  setTimeout(() => {
+    this.product = this.$store.state.productList.find(item => item.id === this.id);
+  },500);
+}
+```
+
+# 其它问题
+## 1.vue-router 按需加载 
+>vue的路由配置文件(routers.js)，一般使用import引入的写法，当项目打包时路由里的所有component都会打包在一个js中，在项目刚进入首页的时候，就会加载所有的组件，所以导致首页加载较慢，而用require会将component分别打包成不同的js，按需加载，访问此路由时才会加载这个js，所以就避免进入首页时加载内容过多。
+
+require: 运行时调用，理论上可以运用在代码的任何地方，import：编译时调用，必须放在文件开头
+
+- import写法：
+```js
+import userCenter from '@/page/usercenter/index.vue'
+export default [
+  {
+    path: '/userCenter',
+    name: 'user-center',
+    component: userCenter
+  },
+  {
+    path: '/news/detail',
+    name: 'news-detail',
+    component: () => import('@/page/news/detail.vue')
+  }
+]
+```
+
+- require写法：
+```js
+
+export default [
+  {
+    path: '/userCenter',
+    name: 'user-center',
+    component: resolve => require(['@/page/userCenter/index.vue'], resolve)
+  },
+  {
+    path: '/news/detail',
+    name: 'news-detail',
+    component: () => resolve => require(['@/page/news/detail.vue'], resolve)
+  }
+]
 ```

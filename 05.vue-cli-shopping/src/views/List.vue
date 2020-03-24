@@ -69,7 +69,14 @@ export default {
 
 <style lang="scss">
 .list {
+  background: #f8f8f8;;
   .list-control{
+    background: rgb(255, 255, 255);
+    border-radius: 6px;
+    margin: 16px;
+    padding: 16px;
+    box-shadow: 0px 1px 1px rgba(0,0,0,.2);
+
     .list-control-filter{
       margin: 4px 0;
       .btn{
