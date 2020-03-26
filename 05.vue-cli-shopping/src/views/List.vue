@@ -27,10 +27,15 @@
     </div>
 
     <!-- 商品展示 -->
-    <Product  v-for="item in filteredAndOrderedList" :info="item" :key="item.id"></Product>
+    <div class="product-list">
+      <Product  v-for="item in filteredAndOrderedList" :info="item" :key="item.id"></Product>
 
-    <!-- Product中没商品时显示 -->
-    <div class="product-not-found">暂无相关商品</div>
+      <!-- Product中没商品时显示 -->
+      <div class="product-not-found">暂无相关商品</div>
+    </div>
+    
+
+    
 
     
   </div>
@@ -87,6 +92,16 @@ export default {
      
     }
     
+  }
+  .product-list{
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+
+    .product-not-found{
+      text-align: center;
+      padding: 32px;
+    }
   }
 }
 </style>

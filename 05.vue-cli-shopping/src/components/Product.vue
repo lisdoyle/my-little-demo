@@ -5,7 +5,11 @@
     <!-- 点击进入商品详情 -->
     <router-link :to="'/product-info/' + info.id"  class="product-main"> 
       <!-- 依次显示商品图片、名称、销量、颜色、单价，加入购物车 -->
-      <img :src="info.image">
+      <div class="img-fit">
+        <img :src="info.image">
+      </div>
+      
+
       <h4>{{info.name}}</h4>
       <h4>销量{{info.sales}}</h4>
       <div class="product-color" :style="{background: colors[info.color]}"></div>
@@ -45,3 +49,41 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.product{
+  width: 25%;
+
+  .product-main{
+    display: block;
+    background: white;
+    margin: 16px;
+    padding: 16px;
+    border: 1px solid #dddee1;
+    border-radius: 6px;
+    overflow: hidden;
+    text-align: center;
+    
+
+    // 图片自适应
+    .img-fit{
+      width: 100%;
+      height: 0;
+      padding-bottom: 100%;
+      position: relative;
+      img{
+        position: absolute;
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+    }
+    h4{
+      color: #222;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  
+}
+</style>
