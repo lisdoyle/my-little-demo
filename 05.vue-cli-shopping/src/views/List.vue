@@ -31,7 +31,7 @@
       <Product  v-for="item in filteredAndOrderedList" :info="item" :key="item.id"></Product>
 
       <!-- Product中没商品时显示 -->
-      <div class="product-not-found">暂无相关商品</div>
+      <div class="product-not-found" v-show="!filteredAndOrderedList.length">暂无相关商品</div>
     </div>
     
 

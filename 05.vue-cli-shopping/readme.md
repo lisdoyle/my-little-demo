@@ -213,3 +213,17 @@ export default [
   }
 ]
 ```
+
+## 2.内容溢出
+>内容溢出可以用 overflow：hidden
+>文字溢出可以用 text-overflow: ellipsis; 溢出时省略号表示
+>文本不会换行white-space: nowrap [具体使用文档](https://www.runoob.com/cssref/pr-text-white-space.html)
+
+```css
+/* 文本不换行，当宽度不够时，不会溢出，而是显示省略号 */
+p{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+```
