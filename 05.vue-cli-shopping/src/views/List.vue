@@ -6,8 +6,8 @@
     <div class="list-control">
       <div class="list-control-filter">
         <span>品牌:</span>
-        <button class="btn btn-primary">111</button>
-        <button class="btn btn-default">222</button>
+        <button class="btn btn-primary" v-for="item in brands" :key="item">{{item}}</button>
+        
       </div>
 
       <div class="list-control-filter">
@@ -15,7 +15,8 @@
         <button 
           class="btn btn-default"
           :class="{'btn-primary':true}"
-        >111</button>
+          v-for="item in colors" :key="item"
+        >{{item}}</button>
         <button class="btn btn-default">222</button>
       </div>
 
@@ -68,6 +69,25 @@ export default {
       let list = [...this.list]
       return list
     },
+    // 3.去重后品牌数组
+    brands(){
+
+      //4月3日 待解决 去重筛选功能
+      // 获取所有品牌
+      var allBrands = this.$store.getters.allBrands
+      // 执行去重，去重后$store.brands数组会更新
+      this.$store.commit('getFilterArray',{array:allBrands,save:this.$store.state.brands})
+      return this.$store.state.brands
+    },
+    // colors(){
+    //   var allColors = this.$store.getters.allColors
+    //   this.$store.commit('getFilterArray',{array:allColors,save:this.$store.state.colors})
+    //   console.log(this.$store.state.colors)
+    //   return this.$store.state.colors
+    // }
+  },
+  mounted(){
+    
   }
 };
 </script>

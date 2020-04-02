@@ -176,8 +176,47 @@ getProduct(){
 
 # 9.处理List.vue中的筛选
 ## 9.1 ES6 Set类型，数组去重方法
+>set对象允许存储任何类型的唯一值,无论是原始值或者是对象引用;
+>因此，通过set储存的元素不能有重复项。
+```js
+var arr = [1,2,3,4,4];
+var set = new Set(arr) //数组转换set对象
+set //{1,2,3,4}
 
+//从对象转换为数组
+[...set] //[1,2,3,4]
+```
+## 9.2引用去重后的数组
+>getters直接计算出allBrands，allBrands是经过计算的所有品牌的数组（包含重复项）
+>
+>mutations只有改变state的作用，因此，allBrands数组去重后的brands数组`只能保存在state中，而不能引用到别的地方`，别的地方想引用，只能到state.brands中引用
+```js
+state: {
+    // 全部商品列表信息
+    productList: product_data,
+    brands:[],//去重后的品牌
+  },
+mutations: {
+    // 数组去重
+    getFilterArray(state,playload){
+      var set = new Set(playload)
+      var arr = [...set]
+      state.brands=arr
+    },
+  },
+getters:{
+    // 品牌、颜色筛选
 
+    // 返回所有品牌（包含重复项）
+    allBrands(state){
+      var arr = state.productList.map(function(item){
+        return item.brand
+      })
+      return arr
+    },
+    
+  },
+```
 
 # 其它问题
 ## 1.vue-router 按需加载 
