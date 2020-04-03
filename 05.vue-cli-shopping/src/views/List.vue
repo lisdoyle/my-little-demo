@@ -6,24 +6,45 @@
     <div class="list-control">
       <div class="list-control-filter">
         <span>品牌:</span>
-        <button class="btn btn-primary" v-for="item in brands" :key="item">{{item}}</button>
-        
+        <button 
+          class="btn btn-default" 
+          :class="{'btn-primary': filterBrand === item}"
+          v-for="item in brands" 
+          :key="item"
+          @click="handleFilterBrand(item)">
+        {{item}}</button>
       </div>
 
       <div class="list-control-filter">
         <span>颜色:</span>
         <button 
           class="btn btn-default"
-          :class="{'btn-primary':true}"
+          :class="{'btn-primary':filterColor === item}"
           v-for="item in colors" :key="item"
+          @click="handleFilterColor(item) "
         >{{item}}</button>
-        <button class="btn btn-default">222</button>
       </div>
 
       <div class="list-control-filter">
         <span>排序:</span>
-        <button class="btn btn-default">111</button>
-        <button class="btn btn-default">222</button>
+        <button class="btn btn-default"
+                :class="{'btn-primary': order ===''}"
+                @click="order=''"
+        >默认</button>
+        <button class="btn btn-default"
+                :class="{'btn-primary': order ==='sales'}"
+                @click="order='sales'"
+        >销量
+          <span v-if="order === 'sales'">↓</span>
+        </button>
+        <button class="btn btn-default"
+                :class="{'btn-primary': order.indexOf('cost')>-1}"
+                @click="handleOrderCost"
+        >价格
+          <span v-if="order === 'cost-desc'">↓</span>
+          <span v-if="order === 'cost-asc'">↑</span>
+        </button>
+        
       </div>
     </div>
 
@@ -51,11 +72,41 @@ export default {
   },
   data() {
     return {
-      
+      //储存排序关键字，“default” “sales” “cost-desc” 'cost-asc'
+      order:'' ,
+      //品牌过滤按钮
+      filterBrand: '',
+      //颜色过滤按钮
+      filterColor: '',
     };
   },
   methods: {
-    
+    // 点击品牌，筛选
+    handleFilterBrand(brand){
+      // 点击选中过滤，再点击取消
+      if(this.filterBrand === brand){
+        this.filterBrand = ''
+      }else{
+        this.filterBrand = brand
+      }
+    },
+    // 点击筛选颜色
+    handleFilterColor(color){
+      if(this.filterColor === color){
+        this.filterColor = ''
+      }else{
+        this.filterColor = color
+      }
+    },
+    // 点击价格排序
+    handleOrderCost(){
+      // 当点击升序时将箭头更新↓,降序设置为↑
+      if(this.order === 'cost-desc'){
+        this.order = 'cost-asc';
+      }else{
+        this.order = 'cost-desc';
+      }
+    }
   },
   computed:{
     // 1.全部商品数组
@@ -67,24 +118,32 @@ export default {
     filteredAndOrderedList(){
       // 深拷贝
       let list = [...this.list]
+      //----筛选操作----//
+
+      // 1.筛选品牌
+      if(this.filterBrand !== '' ){
+        var arr = list.find(function(item){
+          return item.brand === this.filterBrand
+        })
+        list = arr
+      }
+      
+      
+      // .排序
+      if(this.order !=''){
+
+      }
+      //----筛选操作-end---//
       return list
     },
     // 3.去重后品牌数组
     brands(){
-
-      //4月3日 待解决 去重筛选功能
-      // 获取所有品牌
-      var allBrands = this.$store.getters.allBrands
-      // 执行去重，去重后$store.brands数组会更新
-      this.$store.commit('getFilterArray',{array:allBrands,save:this.$store.state.brands})
-      return this.$store.state.brands
+      return this.$store.getters.brands
     },
-    // colors(){
-    //   var allColors = this.$store.getters.allColors
-    //   this.$store.commit('getFilterArray',{array:allColors,save:this.$store.state.colors})
-    //   console.log(this.$store.state.colors)
-    //   return this.$store.state.colors
-    // }
+    // 4.去重后颜色数组
+    colors(){
+      return this.$store.getters.colors
+    },
   },
   mounted(){
     

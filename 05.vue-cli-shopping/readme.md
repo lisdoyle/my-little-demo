@@ -187,36 +187,63 @@ set //{1,2,3,4}
 [...set] //[1,2,3,4]
 ```
 ## 9.2引用去重后的数组
->getters直接计算出allBrands，allBrands是经过计算的所有品牌的数组（包含重复项）
+>getters直接计算出去重后的brands和colors数组，List.vue中直接引用getters.brands就能引用数组
 >
->mutations只有改变state的作用，因此，allBrands数组去重后的brands数组`只能保存在state中，而不能引用到别的地方`，别的地方想引用，只能到state.brands中引用
+>mutations只有改变state的作用，因此一些共用方法如：getFilterArray(),我们将它卸载store外面，一个全局的方法
 ```js
-state: {
-    // 全部商品列表信息
-    productList: product_data,
-    brands:[],//去重后的品牌
-  },
-mutations: {
-    // 数组去重
-    getFilterArray(state,playload){
-      var set = new Set(playload)
-      var arr = [...set]
-      state.brands=arr
-    },
-  },
-getters:{
-    // 品牌、颜色筛选
+//---- 一些公共方法----
+// 1.数组去重方法
+function getFilterArray(arrary){
+  var set = new Set(arrary)
+  var arr = [...set]
+  return arr
+}
+//---- 一些公共方法----
 
-    // 返回所有品牌（包含重复项）
-    allBrands(state){
-      var arr = state.productList.map(function(item){
-        return item.brand
-      })
-      return arr
-    },
-    
+getters:{
+  // 1.返回去重后品牌
+  brands(state){
+    var arr = state.productList.map(function(item){
+      return item.brand
+    })
+    // 去重，返回
+    return getFilterArray(arr)
   },
+  // 2.返回去重后颜色
+  colors(state){
+    var arr = state.productList.map(function(item){
+      return item.color
+    })
+    // 去重，返回
+    return getFilterArray(arr)
+  },
+},
 ```
+## 9.3点击筛选品牌功能
+>通过css和@clock处理按钮样式，
+```css
+<span>排序:</span>
+<button class="btn btn-default"
+        :class="{'btn-primary': order ===''}"
+        @click="order=''"
+>默认</button>
+<button class="btn btn-default"
+        :class="{'btn-primary': order ==='sales'}"
+        @click="order='sales'"
+>销量
+  <span v-if="order === 'sales'">↓</span>
+</button>
+<button class="btn btn-default"
+        :class="{'btn-primary': order ==='cost'}"
+        @click="order='cost'"
+>价格
+  <span v-if="orderCost === 'cost-desc'">↓</span>
+  <span v-if="orderCost === 'cost-asc'">↑</span>
+</button>
+```
+>当点击按钮时，赋予order不同的值，然后filteredAndOrderedList()根据order值的不同来进行排序工作
+
+
 
 # 其它问题
 ## 1.vue-router 按需加载 

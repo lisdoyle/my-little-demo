@@ -4,44 +4,48 @@ import product_data from '../product.js'
 
 Vue.use(Vuex)
 
+//---- 一些公共方法----
+// 1.数组去重方法
+function getFilterArray(arrary){
+  var set = new Set(arrary)
+  var arr = [...set]
+  return arr
+}
+
+//---- 一些公共方法----
+
+
 export default new Vuex.Store({
   // 数据
   state: {
     // 全部商品列表信息
     productList: product_data,
-    brands:[],//去重后的品牌
-    colors:[],//去重后的颜色
   },
   // 类似function，只能同步方式
   mutations: {
-    // 数组去重,
-    getFilterArray(state,playload){
-      // 4月3日待解决
-      // var set = new Set(playload.array)
-      // var arr = [...set]
-      
-    },
+ 
     
     
   },
   // 计算属性
   getters:{
-    // 品牌、颜色筛选
-
-    // 1.返回所有品牌（包含重复项）
-    allBrands(state){
+    // 1.返回去重后品牌
+    brands(state){
       var arr = state.productList.map(function(item){
         return item.brand
       })
-      return arr
+      // 去重，返回
+      return getFilterArray(arr)
     },
-    // 2.返回所有颜色
-    allColors(state){
+
+    // 2.返回去重后颜色
+    colors(state){
       var arr = state.productList.map(function(item){
         return item.color
       })
-      return arr
-    }
+      // 去重，返回
+      return getFilterArray(arr)
+    },
   },
   // 处理异步方法
   actions: {
