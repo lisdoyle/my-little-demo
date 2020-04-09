@@ -220,8 +220,8 @@ getters:{
 },
 ```
 ## 9.3点击筛选品牌功能
->通过css和@clock处理按钮样式，
-```css
+>通过css和@click处理按钮样式，
+```html
 <span>排序:</span>
 <button class="btn btn-default"
         :class="{'btn-primary': order ===''}"
@@ -234,15 +234,62 @@ getters:{
   <span v-if="order === 'sales'">↓</span>
 </button>
 <button class="btn btn-default"
-        :class="{'btn-primary': order ==='cost'}"
-        @click="order='cost'"
+        :class="{'btn-primary': order.indexOf('cost')>-1}"
+        @click="handleOrderCost"
 >价格
-  <span v-if="orderCost === 'cost-desc'">↓</span>
-  <span v-if="orderCost === 'cost-asc'">↑</span>
+  <span v-if="order === 'cost-desc'">↓</span>
+  <span v-if="order === 'cost-asc'">↑</span>
 </button>
 ```
->当点击按钮时，赋予order不同的值，然后filteredAndOrderedList()根据order值的不同来进行排序工作
+>当点按“品牌”或“颜色”筛选按钮时，“filterBrand”和“filterColor”不为空，根据此判断对全部商品列表list，做匹配提取，用的的js的数组方法Array.filter
+```js
+filteredAndOrderedList(){
+  var $this = this
+  // 深拷贝
+  let list = [...this.list]
 
+  //----筛选操作----//
+
+  // 1.筛选品牌
+  if(this.filterBrand !== '' ){
+    list = list.filter(function(item){
+      return item.brand === $this.filterBrand
+    })
+  }
+  
+  // 2.筛选颜色
+  if(this.filterColor !== '' ){
+    list = list.filter(function(item){
+      return item.color === $this.filterColor
+    })
+  }
+}
+```
+
+>当点击"排序"按钮时，赋予order不同的值，然后filteredAndOrderedList()根据order值的不同来进行排序工作
+```js
+if(this.order !==''){
+  switch(this.order){
+    case 'sales':
+      list = list.sort(function(a,b){
+        return b.sales-a.sales
+      })
+    break
+    case 'cost-desc':
+      list = list.sort(function(a,b){
+        return b.cost - a.cost
+      })
+    break
+    case 'cost-asc':
+      list = list.sort(function(a,b){
+        return a.cost - b.cost
+      })
+    break
+  }
+}
+```
+# 10.创建购物车 Cart.vue
+ 
 
 
 # 其它问题

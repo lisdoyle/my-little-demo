@@ -116,22 +116,44 @@ export default {
     },
     // 2.经过筛选的商品数组
     filteredAndOrderedList(){
+      var $this = this
       // 深拷贝
       let list = [...this.list]
       //----筛选操作----//
 
       // 1.筛选品牌
       if(this.filterBrand !== '' ){
-        var arr = list.find(function(item){
-          return item.brand === this.filterBrand
+        list = list.filter(function(item){
+          return item.brand === $this.filterBrand
         })
-        list = arr
       }
       
+      // 2.筛选颜色
+      if(this.filterColor !== '' ){
+        list = list.filter(function(item){
+          return item.color === $this.filterColor
+        })
+      }
       
       // .排序
-      if(this.order !=''){
-
+      if(this.order !==''){
+        switch(this.order){
+          case 'sales':
+            list = list.sort(function(a,b){
+              return b.sales-a.sales
+            })
+          break
+          case 'cost-desc':
+            list = list.sort(function(a,b){
+              return b.cost - a.cost
+            })
+          break
+          case 'cost-asc':
+            list = list.sort(function(a,b){
+              return a.cost - b.cost
+            })
+          break
+        }
       }
       //----筛选操作-end---//
       return list

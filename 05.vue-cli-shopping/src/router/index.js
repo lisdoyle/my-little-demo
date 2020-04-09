@@ -43,6 +43,11 @@ const routes = [
   {
     path: '/product-info/:id',
     component: (resovle) => require(['../views/ProductInfo.vue'], resovle)
+  },
+  {
+    path: '/cart',
+    name: 'cart',
+    component: (resovle) => require(['../views/Cart.vue'],resovle)
   }
 ]
 
