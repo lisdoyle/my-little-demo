@@ -20,12 +20,47 @@ export default new Vuex.Store({
   state: {
     // 全部商品列表信息
     productList: product_data,
+    // 购物车数据，商品的id，购买数量
+    cartList:[
+      {
+        id: 1,
+        count:3
+      },
+      {
+        id: 2,
+        count:1
+      },
+    ],
   },
   // 类似function，只能同步方式
   mutations: {
- 
-    
-    
+    // （增）添加到购物车
+    addCart(state, id){
+      const isAdded = state.cartList.find(item => item.id === id)
+      // 商品如不存在cart中设置为1，存在count++
+      if(isAdded){
+        isAdded.count++
+      }else{
+        state.cartList.push({
+          id:id,
+          count:1
+        })
+      }
+    },
+    // (删)删除购物车商品
+    deleteCart(state,id){
+      const index = state.cartList.findIndex(item => item.id === id)
+      state.cartList.splice(index, 1)
+    },
+    //清空购物车
+    emptyCart(state){
+      state.cartList = [];
+    },
+    // (改)修改购物车商品数量
+    editCartCount(state, payload){
+      const product = state.cartList.find(item => item.id === payload.id);
+      product.count += payload.count;
+    },
   },
   // 计算属性
   getters:{
