@@ -32,30 +32,30 @@
         <div class="cart-cost">
           {{productDictList[item.id].cost * item.count}}
         </div>
-        <div class="cart-delete">
+        <div class="cart-delete" @click="deleteHandle(index)">
           删除
         </div>
       </div>
 
-      <div class="content-empty">购物车为空</div>
+      <div class="content-empty" v-if="!cartList.length">购物车为空</div>
     </div>
 
     <!-- 优惠券 -->
     <div class="cart-promotion">
       <span>使用优惠券</span>
-      <input type="text">
-      <button class="btn btn-primary">验证</button>
+      <input type="text" v-model="promotionCode">
+      <button class="btn btn-primary" @click="checkCode">验证</button>
     </div>
 
     <!-- 底部 -->
     <div class="cart-footer">
       <div class="footer-count">共计
-        <span>xxx</span>
+        <span>{{countAll}}</span>
       </div>
       <div class="footer-discount">应付总额
-        <span>xxxx</span>
+        <span>{{costAll - promotion}}</span>
         <div class="promotion">(优惠
-          <span>￥ xxx</span>)
+          <span>￥{{promotion}}</span>)
         </div>
       </div>
       <div class="footer-submit">
@@ -70,15 +70,37 @@ export default {
   data(){
     return{
       productList: this.$store.state.productList,
+      promotion:0, //优惠金额
+      promotionCode:'', //优惠码
     }
   },
   methods:{
-    countHandle(index, data){
-      alert('ok')
+    // 修改数量
+    countHandle(index, count){
+      // 最小值为1
+      if(count<0 && this.cartList[index].count === 1 ) return
+      this.$store.commit('editCartCount',{
+        id:this.cartList[index].id,
+        count:count
+      })
+    },
+    // 删除商品，根据id
+    deleteHandle(index){
+      this.$store.commit('deleteCart',this.cartList[index].id)
+    },
+    // 验证优惠，优惠信息“youyouhui”
+    checkCode(){
+      if(this.promotionCode === ''){
+        alert('请输入优惠码')
+      }else if(this.promotionCode !== 'youyouhui'){
+        alert('优惠码输入错误')
+      }else{
+        this.promotion = 500
+      }
     }
   },
   computed:{
-    // 
+    // 购物车商品id数组
     cartList(){
       return this.$store.state.cartList
     },
@@ -89,6 +111,19 @@ export default {
         dict[item.id] = item
       });
       return dict
+    },
+    // 购物车商品数量
+    countAll(){
+      let count = 0
+      this.cartList.forEach(item => count+=item.count)
+      return count
+    },
+    costAll(){
+      let cost = 0
+      this.cartList.forEach(item =>{
+        cost += this.productDictList[item.id].cost*item.count
+      })
+      return cost
     }
   }
 }
@@ -165,9 +200,15 @@ export default {
           cursor: pointer;
         }
       }
+      .cart-delete{
+        color: #2d8cf0;
+        cursor: pointer;
+      }
     }
     .content-empty{
       padding: 32px;
+      text-align: center;
+      border-bottom: 1px dashed #e9eaec;
     }
   }
   .cart-promotion{

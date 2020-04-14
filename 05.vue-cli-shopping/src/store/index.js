@@ -18,6 +18,8 @@ function getFilterArray(arrary){
 export default new Vuex.Store({
   // 数据
   state: {
+    // 用户名
+    username:"jj",
     // 全部商品列表信息
     productList: product_data,
     // 购物车数据，商品的id，购买数量

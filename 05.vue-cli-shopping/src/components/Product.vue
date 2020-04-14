@@ -19,7 +19,7 @@
         @click.prevent阻止默认行为
         因为<router-link>会转化为<a> ，而<a></a>间的元素会被附上href跳转默认行为，因此，这里我们不是需要阻止冒泡，为是防止跳转
       -->
-      <div class="product-add-cart" @click.prevent="handleAddCart">
+      <div class="product-add-cart" @click.prevent="handleAddCart(info.id)">
         加入购物车
       </div>
     </router-link>
@@ -43,8 +43,8 @@ export default {
   },
   methods:{
     // 添加到购物车
-    handleAddCart(){
-      alert('临时文字：添加到购物车')
+    handleAddCart(id){
+      this.$store.commit('addCart',id)
     }
   }
 }

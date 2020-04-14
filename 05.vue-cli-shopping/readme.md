@@ -297,6 +297,42 @@ if(this.order !==''){
 >这样做的好处是，购物车中的商品并不是马上就要结算的，可能很多天后用户才结算，如果之后商品价格信息发生变化，但你保存在购物车的商品是旧的价格信息那就会引起混乱，所以在进入购物车页面时，根据购物车中商品的id再重新提取商品信息是必要的。
 
 ## 10.2 在store中建立cart的增删改查
+>在Cart.vue页面中修改购物车中的商品数量，必须通过触发store中的mutation来修改购物车数组cartList，因为cartList是保存在store中的，而能操作store数据的只能是store中的mutation。
+```js
+mutations: {
+  // （增）添加到购物车
+  addCart(state, id){
+    const isAdded = state.cartList.find(item => item.id === id)
+    // 商品如不存在cart中设置为1，存在count++
+    if(isAdded){
+      isAdded.count++
+    }else{
+      state.cartList.push({
+        id:id,
+        count:1
+      })
+    }
+  },
+  // (删)删除购物车商品
+  deleteCart(state,id){
+    const index = state.cartList.findIndex(item => item.id === id)
+    state.cartList.splice(index, 1)
+  },
+  //清空购物车
+  emptyCart(state){
+    state.cartList = [];
+  },
+  // (改)修改购物车商品数量
+  editCartCount(state, payload){
+    const product = state.cartList.find(item => item.id === payload.id);
+    product.count += payload.count;
+  },
+},
+```
+## 10.3 创建优惠券验证功能
+
+# 11.注册登陆用户信息功能
+
 
 
 

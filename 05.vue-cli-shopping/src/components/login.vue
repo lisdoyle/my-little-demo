@@ -20,7 +20,7 @@
 
         <div class="form-group">
           <button class="btn btn-success">提交</button>
-          <button class="btn btn-default">前往注册</button>
+          <router-link to='/loginpage/register' class="btn btn-default" tag='button'>前往注册</router-link>
         </div>
       </form>
     </div>

@@ -25,7 +25,7 @@
 
         <div class="form-group">
           <button class="btn btn-success">提交</button>
-          <button class="btn btn-default">已有账号</button>
+          <router-link to='/loginpage/login' class="btn btn-default" tag='button'>已有账号</router-link>
         </div>
       </form>
     </div>
