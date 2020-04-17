@@ -10,27 +10,55 @@
 
         <div class="form-group">
           <label for="username">用户账号:</label>
-          <input type="text" id="username" />
+          <input type="text" id="username" v-model="username" />
         </div>
 
         <div class="form-group">
           <label for="pwd">用户密码:</label>
-          <input type="password" id="pwd" />
+          <input type="password" id="pwd" v-model="password"/>
         </div>
 
         <div class="form-group">
           <label for="pwd">确认密码:</label>
-          <input type="password" id="pwd" />
+          <input type="password" id="pwd" v-model="confirmPassword"/>
         </div>
 
         <div class="form-group">
-          <button class="btn btn-success">提交</button>
+          <button class="btn btn-success" @click="register">提交</button>
           <router-link to='/loginpage/login' class="btn btn-default" tag='button'>已有账号</router-link>
         </div>
       </form>
     </div>
   </div>
 </template>
+
+<script>
+
+
+export default {
+  data(){
+    return{
+      // 填入的名字
+      username:'',
+      password:'',
+      confirmPassword:'',
+    }
+  },
+  methods:{
+    // 存入local.storage
+    register(){
+      // 去前后空格
+      var $username =this.username.trim()
+      var $password =this.password.trim()
+      //
+      if( $username || $password){
+
+      }
+    }
+  }
+}
+</script>
+
 
 <style lang="scss">
 
