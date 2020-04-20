@@ -330,11 +330,111 @@ mutations: {
 },
 ```
 ## 10.3 创建优惠券验证功能
+>这里选预设优惠码为"youyouhui",当输入字符与预设一致时，调整金额
 
+```js
+// 验证优惠，优惠信息“youyouhui”
+checkCode(){
+  if(this.promotionCode === ''){
+    alert('请输入优惠码')
+  }else if(this.promotionCode !== 'youyouhui'){
+    alert('优惠码输入错误')
+  }else{
+    this.promotion = 500
+  }
+}
+```
 # 11.注册登陆用户信息功能
-
-
-
+>我们先把localStorage作为后台数据库,保存注册信息,和用于校验登陆信息是否一致.
+```js
+  localStorage.username //用来保存用户注册的username
+  localStorage.password //保存密码
+  localStorage.loginStatus = "login"/false //登陆状态，"login"时开放会员权限，“false”时为未登录状态
+```
+## 11.1 保存注册信息
+>把注册信息保存在localStorage。
+>
+```js
+register(){
+  // 去除前后空格
+  var $username =this.username.trim()
+  var $password =this.password.trim()
+  //判断是否为空
+  if( !$username || !$password){
+    alert('账号或密码不能为空')
+    return
+  }
+  // 判断密码是否一致
+  if(this.password !== this.confirmPassword){
+    alert('密码不一致，请重新输入')
+    this.password = ''
+    this.confirmPassword = ''
+  }else{
+    // 保存到localStorage
+    localStorage.username = this.username
+    localStorage.password = this.password
+    localStorage.loginStatus = 'login'
+    // 把用户名返回给store 因为很多页面要用到这个值
+    this.$store.commit('getUser',this.username)
+    alert('注册成功') 
+    this.$router.replace('/list')
+  }
+},
+```
+## 11.2 校验登陆信息
+>获取localStorage中的username和password，与输入的登陆信息校对，一致的给localStorage.loginStatus = "login" ,否则localStorage.loginStatus=false状态。
+```js
+login(){
+  // 先从localStorage获取数据
+  var username = localStorage.username
+  var password = localStorage.password
+  // 判断登陆信息不为空
+  if(!this.username.trim() || !this.password.trim()){
+    alert("账号或密码不能为空")
+    return
+  }
+  // 和后台保存的数据是否一致
+  if(username === this.username && password === this.password){
+    localStorage.loginStatus = "login"
+    this.$store.commit("getUser",this.username)
+    alert("登陆成功")
+    this.$router.push("/list")
+  }else{
+    alert("账号或密码错误")
+  }
+}
+```
+## 11.3 每次进入logninpage判断登陆状态
+>每次进入loginpagev.vue先从localStorage获取登陆状态，如能获取到“login”状态，跳过登陆、注册页面，直接跳转到list.vue页面
+```js
+// 进入页面先判断能不能获取到登陆状态
+// 如果为登陆状态，直接跳转到 list 页面
+created(){
+  var loginStatus =this.$store.state.loginStatus
+  if(loginStatus === "login"){
+    alert("您已经是登录状态")
+    this.$router.push("/list")
+  }
+}
+```
+## 11.4 退出登陆状态
+>退出登陆状态，把localStorage.loginStatus = false,
+>然后navbar.vue页面根据 v-if="loginStatus",来判断是否显示导航栏组件。
+```js
+computed:{
+  loginStatus(){
+    return this.$store.state.loginStatus //用来控制v-if,显示或隐藏导航栏
+  }
+},
+methods:{
+  // 退出登陆状态
+  logout(){
+    localStorage.loginStatus = false
+    this.$store.commit("getLoginStatus",false) //把LoginStatus的值同步保存到store中
+    this.$router.push("/") //退出后跳转首页
+  }
+}
+```
 
 # 其它问题
 ## 1.vue-router 按需加载 
@@ -388,4 +488,51 @@ p{
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+```
+
+## 3.组件中的data不会实时更新
+>如果在组件中的data 直接引用Vuex中的state数据，state更新了，data中的书籍是不会更新的。
+>`组件请用computed去接收state和getter`,就算不是来自vuex的数据，只要是data中的都不会更新，data的定义时的作用就是初始值。
+```js
+data(){
+  return{
+    username:this.$store.state.username
+  }
+}
+
+// 当 store中的 state.username 更新了，这里的 this.$store.state.username 还是不会更新，还是原来的旧值。
+
+// 应该用computed
+computed：{
+  username(){
+    return this.$store.state.username
+  }
+}
+```
+## 4.路由跳转
+>一般页面跳转可以使用location.href
+```js
+location.href= 'www.baidu.com'
+```
+>但是在vue-router作用下，用location.href会有问题，更好的方法是用vue-router提供的方法
+```js
+// 1. push方法
+// push方法其实和<router-link :to="...">是等同的。
+// push方法的跳转会向 history 栈添加一个新的记录，当我们点击浏览器的返回按钮时可以看到之前的页面。
+
+// xxx/#/register
+this.$router.push('/register')
+// 带查询参数，变成 xxx/#/register?plan=123
+this.$router.push({ path: '/register', query: { plan: '123' }})
+
+// 2. go方法
+// 页面路由跳转 前进或者后退
+this.$router.go(-1) // 后退
+
+// 3.replace方法
+// 不会向 history 栈添加一个新的记录
+<router-link to="/05" replace>05</router-link>
+
+// 一般使用replace来做404页面
+this.$router.replace('/')
 ```

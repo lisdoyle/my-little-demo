@@ -18,28 +18,21 @@ function getFilterArray(arrary){
 export default new Vuex.Store({
   // 数据
   state: {
+    //登陆状态，默认先从localStorage获取
+    loginStatus:localStorage.loginStatus,
     // 用户名
-    username:"jj",
+    username:localStorage.username,
     // 全部商品列表信息
     productList: product_data,
     // 购物车数据，商品的id，购买数量
-    cartList:[
-      {
-        id: 1,
-        count:3
-      },
-      {
-        id: 2,
-        count:1
-      },
-    ],
+    cartList:[],
   },
   // 类似function，只能同步方式
   mutations: {
     // （增）添加到购物车
     addCart(state, id){
       const isAdded = state.cartList.find(item => item.id === id)
-      // 商品如不存在cart中设置为1，存在count++
+      // 商品如不存在cart中设置他的数量为1，存在count++
       if(isAdded){
         isAdded.count++
       }else{
@@ -63,6 +56,14 @@ export default new Vuex.Store({
       const product = state.cartList.find(item => item.id === payload.id);
       product.count += payload.count;
     },
+    // 获取用户名
+    getUser(state, username){
+      state.username = username
+    },
+    // 设置登陆状态
+    getLoginStatus(state, status){
+      state.loginStatus = status
+    }
   },
   // 计算属性
   getters:{

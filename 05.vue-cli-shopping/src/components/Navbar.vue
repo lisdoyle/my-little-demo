@@ -1,17 +1,17 @@
 <template>
-  <div class="navibar">
+  <div class="navibar" v-if="loginStatus">
     
 
     <router-link to="/list" class="nav-home">首页</router-link>
 
     <router-link to="/cart" class="nav-cart">购物车
-      <span v-if="cartList.length">{{cartList.length}}</span>
+      <span v-if="cartList.length">{{this.cartList.length}}</span>
     </router-link>
 
     <div>{{username}}</div>
 
-    <router-link to="/loginpage/logout" class="nav-logout">退出登录
-    </router-link>
+    <a class="nav-logout" href="javascript:void(0)" @click="logout">退出登录
+    </a>
   </div>
 </template>
 
@@ -19,8 +19,26 @@
 export default {
   data(){
     return{
-      cartList: this.$store.state.cartList,
-      username: this.$store.state.username
+      
+    }
+  },
+  computed:{
+    cartList(){
+      return this.$store.state.cartList
+    },
+    username(){
+      return this.$store.state.username
+    },
+    loginStatus(){
+      return this.$store.state.loginStatus
+    }
+  },
+  methods:{
+    // 退出登陆状态
+    logout(){
+      localStorage.loginStatus = false
+      this.$store.commit("getLoginStatus",false)
+      this.$router.push("/")
     }
   }
 }
