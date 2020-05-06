@@ -11,7 +11,7 @@
       <div class="product-information">
         <h1 class="product-name">{{product.name}}</h1>
         <div class="product-cost">{{product.cost}}</div>
-        <button class="product-add-cart btn btn-primary">加入购物车</button>
+        <button class="product-add-cart btn btn-primary" @click="handleAddCart(product.id)">加入购物车</button>
       </div>
     </div>
     <div class="product-description">
@@ -39,6 +39,11 @@ export default {
       setTimeout(() => {
         this.product = this.$store.state.productList.find(item => item.id === this.id);
       },500);
+    },
+
+    // 添加到购物车
+    handleAddCart(id){
+      this.$store.commit('addCart',id)
     }
   },
   mounted(){

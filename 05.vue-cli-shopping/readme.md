@@ -436,6 +436,61 @@ methods:{
 }
 ```
 
+# 12.购买结算
+## 12.1 promise使用
+>Promise函数定义一个回调函数，它会先执行自己内部的代码，而回调的函数resolve、reject的定义在then()函数中。
+
+```js
+var p = new Promise(function (resolve, reject) {
+  console.log(1);
+  resolve("成功");
+  reject("失败");
+})
+
+p.then(function(res){
+  console.log(res);
+},function(rej){
+  console.log(rej);
+})
+
+//执行then()函数后，
+//1、先执行Promise里的函数，输出 1 ，
+//2、然后执行resolve("成功") ，它的定义在then中，输出 “成功”
+//3、然后执行reject("失败")，它的定义在then中，输出“失败”
+```
+## 12.2 结算按钮
+>点击“结算”，dispatch在$store中的“buy”函数，因为结算的过程一般是通过ajax和后台数据库执行的，因此属于异步对象，而异步对象函数只能通过action处理，所以要用dispatch去触发action中的buy函数。
+
+>而buy需要先通过ajax或者axois等异步方法处理数据库数据，然后服务端响应后再清空购物车。
+
+>而结算成功后，一般需要回调一个成功函数，因此可以把 buy 封装成 Promise对象，按钮时用then()定义成功回调函数。
+
+```js
+methods: {
+  //通知Vuex,完成下单
+  orderHandle(){
+    this.$store.dispatch('buy').then(() => {
+        window.alert('购买成功');
+    })
+  },
+}
+```
+```js
+actions:{
+  //购买
+  buy(context){
+    //生产环境使用ajax请求服务端响应后再清空购物车
+    //这里用setTimeout代替异步行为
+    return new Promise(resolve => {
+        setTimeout(() => {
+            context.commit('emptyCart'); //清空购物车
+            resolve();
+        }, 500);
+    });
+  },
+}
+```
+
 # 其它问题
 ## 1.vue-router 按需加载 
 >vue的路由配置文件(routers.js)，一般使用import引入的写法，当项目打包时路由里的所有component都会打包在一个js中，在项目刚进入首页的时候，就会加载所有的组件，所以导致首页加载较慢，而用require会将component分别打包成不同的js，按需加载，访问此路由时才会加载这个js，所以就避免进入首页时加载内容过多。

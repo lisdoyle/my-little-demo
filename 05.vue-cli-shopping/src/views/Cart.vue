@@ -59,7 +59,7 @@
         </div>
       </div>
       <div class="footer-submit">
-        <button class="btn btn-primary">现在结算</button>
+        <button class="btn btn-primary" @click="orderHandle">现在结算</button>
       </div>
     </div>
   </div>
@@ -97,6 +97,15 @@ export default {
       }else{
         this.promotion = 500
       }
+    },
+    // 结算，通知vuex下单
+    orderHandle(){
+      this.$store.dispatch('buy').then(
+        // 成功回调函数
+        function(){
+          window.alert('购买成功');
+        }
+      )
     }
   },
   computed:{
