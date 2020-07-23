@@ -92,8 +92,8 @@
       </el-col>
     </el-row>
 
-    <AddUserInfo :dialogAdd="dialogAdd" ></AddUserInfo>
-    <EditUserInfo :dialogEdit="dialogEdit" :formDate="formDate"></EditUserInfo>
+    <AddUserInfo :dialogAdd="dialogAdd" @getdata='getData'></AddUserInfo>
+    <EditUserInfo :dialogEdit="dialogEdit" :formDate="formDate" @getdata='getData'></EditUserInfo>
   </div>
 </template>
 
@@ -107,7 +107,6 @@ export default {
   data(){
     return{
       keyUser:'',  //查询用户信息
-      tableData:this.$store.state.db, //临时数据库
       dialogAdd:{   //控制添加弹出表单
         show:false
       },
@@ -120,8 +119,14 @@ export default {
         email:'',
         title:'',
         evaluate:'',
-        state:''
+        state:'',
+        id:''
       },
+    }
+  },
+  computed:{
+    tableData(){
+      return this.$store.state.db //数据库
     }
   },
   components:{
@@ -136,7 +141,19 @@ export default {
     },
     // 点击“删除按钮”
     handleDelete(index, row){
-      this.$store.commit("delete",row.id) //触发store中的删除功能
+      // this.$store.commit("delete",row.id) //触发store中的删除功能
+
+      this.$axios({
+        method:'delete',
+        url:'http://localhost:3000/users/'+row.id,
+      })
+      .then((res)=>{
+        console.log(res)
+        this.getData() //获取数据，刷新页面
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
     },
     // 点击“编辑按钮”
     handleEdit(idnex, row){
@@ -151,7 +168,20 @@ export default {
         id:row.id
       }
     },
-    
+    // 获取数据库数据,把数据更新到store
+    getData(){
+      this.$axios({
+        method:"get",
+        url:'http://localhost:3000/users'
+      })
+      .then((response) =>{          //这里使用了ES6的语法
+        console.log(response.data)       //请求成功返回的数据
+        this.$store.commit('getdata',response.data)
+      })
+      .catch((error) =>{
+        console.log(error)
+      })
+    },
   },
   filters:{
     userFilter(db,keyUser){
@@ -162,5 +192,9 @@ export default {
       })
     }
   },
+  mounted(){
+    this.getData()
+  },
+  
 }
 </script>

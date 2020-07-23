@@ -63,9 +63,24 @@ export default {
       // 先验证表单规则,valid=true 通过验证
       this.$refs[formEdit].validate((valid,obj)=>{
         if(valid){
-          // 把新数据传给store，store通过id号替换数据
-          this.$store.commit("edit",this.formDate)
-          this.dialogEdit.show = false;
+          // // 把新数据传给store，store通过id号替换数据
+          // this.$store.commit("edit",this.formDate)
+          // this.dialogEdit.show = false;
+
+          // 通过$axios 修改数据
+          this.$axios({
+            method:"patch",
+            url:'http://localhost:3000/users/'+this.formDate.id,
+            data:this.formDate
+          })
+          .then((res)=>{
+            console.log(res)
+            this.dialogEdit.show = false;
+            this.$emit("getdata") //父组件传过来的事件，刷新store数据
+          })
+          .catch((err)=>{
+            console.log(err)
+          })
         }else{
           console.log('error submit!!');
           return false;

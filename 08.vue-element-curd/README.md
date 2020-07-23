@@ -1,32 +1,25 @@
-# 08.vue-element-curd
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+[toc]
 
 # 简介
->这是一个用 vue-cli + element-ui 搭建的信息管理界面，后期会添加php后端服务器，运用axios 传递数据。
+>这是一个用 vue-cli + element-ui 搭建的信息管理界面，后期会添加php后端服务器，运用axios 传递数据,现阶段使用json-server来模拟服务器和数据库。
 
-https://www.cnblogs.com/zhoulifeng/p/9900564.html
+原文：https://www.cnblogs.com/zhoulifeng/p/9900564.html
+
+# 启动例子
+>先启动json-server服务器,在项目文件夹中执行：
+```bash
+json-server --watch db.json
+```
+>再打包vue
+```bash
+#开发模式
+npm run server
+
+#或 生产打包
+npm run build
+
+```
 
 # 预备工作
 >安装vue-cli,
@@ -522,6 +515,237 @@ filters:{
 ```
 
 
+# 6. 搭建json-server服务器
+```bash
+npm install -g json-server
+#全局安装
+```
+```bash
+json-server --watch db.json
+#在当前文件夹启动服务器
+#并监控当前文件夹的 db.json 文件
+```
+## 6.1 创建db.json文件
+```json
+{
+  "users":[
+    { 
+      "date":"2019-01-01",
+      "name":"peter1",
+      "email":"peter1@qq.com",
+      "title":"title",
+      "evaluate":"evaluate",
+      "state":"state",
+      "id":1
+    },
+    { 
+      "date":"2019-01-02",
+      "name":"peter2",
+      "email":"peter2@qq.com",
+      "title":"title",
+      "evaluate":"evaluate",
+      "state":"state",
+      "id":2
+    },
+  ]
+}
+```
+# 7.安装axios
+
+>axios 和 vue-axios是有区别的
+## 7.1 axios
+>axios是一个库，并不是vue中的第三方插件，使用时不能通过Vue.use()安装插件，需要在原型上进行绑定：
+```bash
+$cnpm install --save axios  #安装
+```
+在mian.js中引用axios，并邦到原型链上。使用插件的时候，一般要在入口文件main.js中引入，因为mian.js是项目首先运行的文件：
+```js
+import Vue from 'vue'
+import axios from 'axios'
+Vue.prototype.$axios = axios //绑定到全局 使用 this.$axios
+```
+
+## 7.2 vue-axios
+>vue-axios是将axios集成到Vue.js的小包装器，可以像插件一样进行安装
+```bash
+$cnpm install --save axios vue-axios  #安装
+```
+在mian.js中引用axios，vue-axios，通过全局方法 Vue.use() 使用插件，就相当于调用install方法：
+```js
+import Vue from 'vue'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+Vue.use(VueAxios, axios)
+```
+使用：
+```js
+Vue.axios.get(api).then((response) => {
+  console.log(response.data)
+})
+ 
+this.axios.get(api).then((response) => {
+  console.log(response.data)
+})
+ 
+this.$http.get(api).then((response) => {
+  console.log(response.data)
+})
+```
+
+# 8.把数据改到json-serve服务器
+>json-server 是一个mock模拟服务器，基于express，通过web的响应方式（get、post），处理json数据，json-server是根据id号来处理数据的，因此，如果存入的数据没有id号，他会默认自增。
+## 8.1 获取数据
+>搭建好json-serve服务器后，在 UserInfo.vue 载入时通过axios获取db.json数据,并传入store，UserInfo.vue 通过computed监控store数据变化
+```js
+// UserInfo.vue
+
+// 监控store中的数据变化
+computed:{
+  tableData(){
+    return this.$store.state.db //临时数据库
+  }
+},
+
+//载入时，通过axios向json服务器获取数据，返回对象的.data就是我们在db.json的数据 
+methods:{
+  // 获取数据库数据,把数据更新到store
+  getData(){
+    this.$axios({
+      method:"get",
+      url:'http://localhost:3000/users'
+    })
+    .then((response) =>{          //这里使用了ES6的语法
+      console.log(response.data)       //请求成功返回的数据
+      this.$store.commit('getdata',response.data) //把获取到的数据保存在store中
+    })
+    .catch((error) =>{
+      console.log(error)
+    })
+  }
+},
+mounted(){
+  this.getData()
+}
+```
+## 8.2 添加数据
+>在原本的 AddUserInfo.vue 的添加数据功能，改为通过axios的post功能，把要保持的数据添加到 data对象中，就可以把数据保存到json-server中。 
+>保存好后，要执行一次上面8.1步的 getData() 获取数据功能，把更新后的db.json数据，获取到store中。这里用到父传子事件，用 @getdata='getData' 绑定，$emit("getdata")触发
+```html
+<!-- UserInfo.vue -->
+<!-- 把 UserInfo.vue 中的 getData 传给子组件 AddUserInfo.vue 的 getdata 事件-->
+<AddUserInfo :dialogAdd="dialogAdd" @getdata='getData'></AddUserInfo>
+```
+```js
+//AddUserInfo.vue
+
+methods:{
+  // 点击“确定”检查验证规则，无误后提交表单数据到数据库
+  dialogFormAdd(formAdd){
+    // validate接收一个回调函数，检查表单，无问题返回true，有问题返回false，并返回obj错误的信息
+    this.$refs[formAdd].validate((valid,obj)=>{
+      if(valid){
+        
+        // //触发store中的追加数据功能
+        // this.$store.commit('add',this.formDate); 
+        // this.dialogAdd.show = false;
+        // this.formDate  = {  //提交后清空
+        //   date:'', 
+        //   name:'',
+        //   email:'',
+        //   title:'',
+        //   evaluate:'',
+        //   state:''
+        // }
+
+        this.$axios({
+          method:"post",
+          url:'http://localhost:3000/users',
+          data:this.formDate //保存的数据
+        }).then((res)=>{
+          console.log(res) //返回上面保存的数据
+          this.dialogAdd.show = false; //关闭面板
+          this.formDate  = {  //提交后清空
+            date:'', 
+            name:'',
+            email:'',
+            title:'',
+            evaluate:'',
+            state:''
+          } 
+          this.$emit("getdata") //触发父组件传过来的事件，刷新store数据
+        }).catch((err)=>{
+          console.log(error)
+        })
+
+        console.log('添加信息成功');
+      }else{
+        console.log('error submit!!');
+        return false;
+      }
+    })
+  }
+},
+```
+
+## 8.3 改写编辑功能
+>原本编辑功能只是修改store中的数据（edit方法），现在有了json-server服务器，我们可以直接修改数据库中的数据，然后更新store中的数据。原本store中的edit方法可以删除了
+```js
+//EditUserInfo.vue
+
+methods:{
+  // 点击“确认按钮”
+  dialogFormAdd(formEdit){
+    // 先验证表单规则,valid=true 通过验证
+    this.$refs[formEdit].validate((valid,obj)=>{
+      if(valid){
+        // // 把新数据传给store，store通过id号替换数据
+        // this.$store.commit("edit",this.formDate)
+        // this.dialogEdit.show = false;
+
+        // 通过$axios 修改数据
+        this.$axios({
+          method:"patch",
+          url:'http://localhost:3000/users/'+this.formDate.id, //根据id号patch替换
+          data:this.formDate
+        })
+        .then((res)=>{
+          console.log(res)
+          this.dialogEdit.show = false;
+          this.$emit("getdata") //父组件传过来的事件，刷新store数据
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+      }else{
+        console.log('error submit!!');
+        return false;
+      }
+    })
+  }
+},
+```
+## 8.4改写删除功能
+>原本点击删除按钮，是通过触发store中的delete方法更具id删除的，现在因为是json-server的，可以直接通过axios删除数据，然后更新store中的数据
+```js
+//UserInfo.vue
+
+// 点击“删除按钮”
+handleDelete(index, row){
+  // this.$store.commit("delete",row.id) //触发store中的删除功能
+
+  this.$axios({
+    method:'delete',
+    url:'http://localhost:3000/users/'+row.id,
+  })
+  .then((res)=>{
+    console.log(res)
+    this.getData() //获取数据，刷新页面
+  })
+  .catch((err)=>{
+    console.log(err)
+  })
+},
+```
 
 
 # 其他
@@ -538,3 +762,5 @@ module.exports = {
   }     
 }
 ```
+
+## axios 和 vue-axios是有区别的

@@ -52,7 +52,7 @@ export default {
         email:'',
         title:'',
         evaluate:'',
-        state:''
+        state:'',
       },
       formrules:{
         date:[{required:true,message:"日期不能为空",trigger:"blur"}],
@@ -68,17 +68,39 @@ export default {
       // validate接收一个回调函数，检查表单，无问题返回true，有问题返回false，并返回obj错误的信息
       this.$refs[formAdd].validate((valid,obj)=>{
         if(valid){
-          //触发store中的追加数据功能
-          this.$store.commit('add',this.formDate); 
-          this.dialogAdd.show = false;
-          this.formDate  = {  //提交后清空
-            date:'', 
-            name:'',
-            email:'',
-            title:'',
-            evaluate:'',
-            state:''
-          }
+          
+          // //触发store中的追加数据功能
+          // this.$store.commit('add',this.formDate); 
+          // this.dialogAdd.show = false;
+          // this.formDate  = {  //提交后清空
+          //   date:'', 
+          //   name:'',
+          //   email:'',
+          //   title:'',
+          //   evaluate:'',
+          //   state:''
+          // }
+         
+          this.$axios({
+            method:"post",
+            url:'http://localhost:3000/users/',
+            data:this.formDate //要保存的数据
+          }).then((res)=>{
+            console.log(res)
+            this.dialogAdd.show = false;
+            this.formDate  = {  //提交后清空
+              date:'', 
+              name:'',
+              email:'',
+              title:'',
+              evaluate:'',
+              state:'',
+            } 
+            this.$emit("getdata") //父组件传过来的事件，刷新store数据
+          }).catch((err)=>{
+            console.log(err)
+          })
+
           console.log('添加信息成功');
         }else{
           console.log('error submit!!');
